@@ -64,6 +64,13 @@ void loop()
   }
   else {
     digitalWrite(led3Pin, LOW);
+    radio.begin();                      // initialize RF24
+    radio.setPALevel(RF24_PA_MAX);      // set power amplifier (PA) level
+    radio.setDataRate(RF24_1MBPS);      // set data rate through the air
+    radio.setRetries(0, 15);            // set the number and delay of retries
+    radio.openWritingPipe(addresses);   // open a pipe for writing
+    radio.openReadingPipe(1, addresses);// open a pipe for reading
+    radio.stopListening();              // stop listening for incoming messages
   }
   delay(20);
 
