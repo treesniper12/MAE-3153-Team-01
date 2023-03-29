@@ -28,18 +28,20 @@ void loop() {
     clearNrfFlag();
     updateCarActionByNrfRemote();
     
-  if (nrfDataRead[5] == 0)
-  {
-    servo1.write(180);
-  } 
-  else if (nrfDataRead[6] == 0)
-  {
-    servo1.write(0);
-  }
-  else
-  {
-    servo1.write(90);
-  }
+    float servoSpeed = nrfDataRead[0] / 1023;
+
+    if (nrfDataRead[5] == 0)
+    {
+      servo1.write(int(90+(servoSpeed*89)));
+    } 
+    else if (nrfDataRead[6] == 0)
+    {
+      servo1.write(int(90-(servoSpeed*89)));
+    }
+    else
+    {
+      servo1.write(90);
+    }
 
     lastNrfUpdateTime = millis();
   }
