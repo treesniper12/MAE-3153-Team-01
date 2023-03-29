@@ -11,7 +11,11 @@
 #include "Freenove_WS2812B_RGBLED_Controller.h"
 #include "RF24_Remote.h"
 
+#include <Servo.h>
+
 #define NRF_UPDATE_TIMEOUT    1000
+
+Servo servo1;
 
 u32 lastNrfUpdateTime = 0;
 u8 nrfCarMode = OFF_OFF_OFF, lastNrfCarMode = OFF_OFF_OFF;
@@ -33,6 +37,7 @@ Freenove_WS2812B_Controller strip(STRIP_I2C_ADDRESS, STRIP_LEDS_COUNT, TYPE_GRB)
 
 void setup() {
   pinsSetup();
+  servo1.attach(PIN_SERVO);
   if (!nrf24L01Setup()) {
     alarm(4, 2);
   }
