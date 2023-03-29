@@ -51,7 +51,7 @@ void loop()
   dataWrite[0] = analogRead(pot1Pin); // save data of Potentiometer 1
   dataWrite[1] = analogRead(pot2Pin); // save data of Potentiometer 2
   dataWrite[2] = analogRead(joystickXPin);  // save data of direction X of joystick
-  dataWrite[3] = analogRead(joystickYPin);  // save data of direction Y of joystick
+  dataWrite[3] = 1023-analogRead(joystickYPin);  // save data of direction Y of joystick
   dataWrite[4] = digitalRead(joystickZPin); // save data of direction Z of joystick
   dataWrite[5] = digitalRead(s1Pin);        // save data of switch 1
   dataWrite[6] = digitalRead(s2Pin);        // save data of switch 2
