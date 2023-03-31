@@ -21,7 +21,7 @@ u32 lastNrfUpdateTime = 0;
 void setup() {
   setupScreen();
   clearScreen();
-
+  //test
   screenPrint(1,3,"Group 1");
   getBatteryVoltage();
   char buffer[6];
