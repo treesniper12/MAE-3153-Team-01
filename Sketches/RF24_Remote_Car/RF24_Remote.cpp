@@ -45,25 +45,27 @@ void clearNrfFlag() {
 }
 
 void updateCarActionByNrfRemote() {
-  int x = nrfDataRead[2] - 512;
-  int y = nrfDataRead[3] - 512;
-  int pwmL, pwmR;
-  if (y < 0) {
-    pwmL = (-y + x) / 2;
-    pwmR = (-y - x) / 2;
-  }
-  else {
-    pwmL = (-y - x) / 2;
-    pwmR = (-y + x) / 2;
-  }
-  motorRun(pwmL, pwmR);
-
-  if (nrfDataRead[4] == 0) {
-    setBuzzer(true);
-  }
-  else {
-    setBuzzer(false);
-  }
+float speed = nrfDataRead[1] /1023.0; // 1023.0 not 1023
+int rightturn = nrfDataRead[2] - 512;
+int forward = -(nrfDataRead[3] - 512);
+int leftmotor, rightmotor;
+if ( nrfDataRead[7] == 0) 
+{
+  forward = -forward;
+}
+rightturn=rightturn * speed;
+//forward = forward * speed;
+leftmotor = (forward + rightturn) / 2;
+rightmotor = (forward - rightturn) / 2;
+motorRun(leftmotor, rightmotor);
+if (nrfDataRead[4] == 0) 
+{
+  setBuzzer(true);
+}
+else 
+{
+  setBuzzer(false);
+}
 }
 
 void resetNrfDataBuf() {

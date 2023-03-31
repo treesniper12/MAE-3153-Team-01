@@ -19,6 +19,17 @@ Servo servo1;
 u32 lastNrfUpdateTime = 0;
 
 void setup() {
+  setupScreen();
+  clearScreen();
+
+  screenPrint(1,3,"Group 1");
+  getBatteryVoltage();
+  char buffer[6];
+  dtostrf(batteryVoltage,4,2,buffer);
+  screenPrint(2,1,buffer);
+  screenPrint(2,6,"Volts");
+  screenPrint(3,1,"Mode:");
+
   pinsSetup();
   servo1.attach(PIN_SERVO);
   if (!nrf24L01Setup()) {
@@ -53,8 +64,9 @@ void loop() {
     resetNrfDataBuf();
     updateCarActionByNrfRemote();
   }
+}
 
-  void setupScreen() {
+void setupScreen() {
   Wire.begin();
   Wire.setClock(400000L);
   oled.begin(&Adafruit128x64, I2C_ADDRESS);
@@ -72,4 +84,4 @@ void screenPrint(int row, int col, char* value) {
   // and prints the string starting the the row and column location
   oled.print(value);  
 }
-}
+
