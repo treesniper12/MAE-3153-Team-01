@@ -14,6 +14,20 @@
 #define I2C_ADDRESS 0x3C
 #define NRF_UPDATE_TIMEOUT    1000
 
+#define MODE_STOP 0
+#define MODE_MANUAL 1
+#define MODE_AUTO 2
+
+#define AUTO_MODE_STOP 0
+#define AUTO_MODE_FORWARD 1
+#define AUTO_MODE_BACKWARD 2
+#define AUTO_MODE_RIGHTTURN 3
+#define AUTO_MODE_LEFTTURN 4
+#define AUTO_MODE_SERVO_POS 5
+#define AUTO_MODE_SERVO_NEG 6
+
+int mode, automode, start_time, current_time, delta_time;
+
 SSD1306AsciiWire oled;
 Servo servo1;
 u32 lastNrfUpdateTime = 0;
@@ -29,41 +43,127 @@ void setup() {
   screenPrint(2,1,buffer);
   screenPrint(2,6,"Volts");
   screenPrint(3,1,"Mode:");
-
   pinsSetup();
   servo1.attach(PIN_SERVO);
-  if (!nrf24L01Setup()) {
+  if (!nrf24L01Setup()) 
+  {
     alarm(4, 2);
   }
+
+  mode = MODE_STOP;
 }
 
 void loop() {
-  if (getNrf24L01Data()) {
+  if (getNrf24L01Data()) 
+  {
     clearNrfFlag();
-    updateCarActionByNrfRemote();
-    
-    float servoSpeed = nrfDataRead[0] / 1023.0;
 
-    if (nrfDataRead[5] == 0)
+    if (mode == MODE_STOP) 
     {
-      servo1.write(int(91+(servoSpeed*36)));
-    } 
-    else if (nrfDataRead[6] == 0)
-    {
-      servo1.write(int(91-(servoSpeed*32)));
-    }
-    else
-    {
-      servo1.write(91);
+      if ( nrfDataRead[5] == 0 )
+      {
+        mode = MODE_AUTO;
+        automode = AUTO_MODE_STOP;
+        start_time = millis();
+        //Serial.println(start_time);
+      }  
     }
 
-    lastNrfUpdateTime = millis();
+    if (mode == MODE_AUTO)
+    {
+        current_time = millis();
+        delta_time = current_time - start_time;
+
+        if (delta_time > 15000)
+        {
+          mode = MODE_MANUAL;  
+        } 
+        else 
+        {
+          autonomous(delta_time);
+        }
+    }
+
+    if (mode == MODE_MANUAL  )
+    {
+      updateCarActionByNrfRemote();
+      
+      float servoSpeed = nrfDataRead[0] / 1023.0;
+
+      if (nrfDataRead[5] == 0)
+      {
+        servo1.write(int(91+(servoSpeed*36)));
+      } 
+      else if (nrfDataRead[6] == 0)
+      {
+        servo1.write(int(91-(servoSpeed*32)));
+      }
+      else
+      {
+        servo1.write(91);
+      }
+    }
+      lastNrfUpdateTime = millis();
   }
+  
   if (millis() - lastNrfUpdateTime > NRF_UPDATE_TIMEOUT) {
     lastNrfUpdateTime = millis();
     resetNrfDataBuf();
     updateCarActionByNrfRemote();
   }
+}
+
+int do_auto(int automode, int current_time,  int start_time, int duration) {
+
+  int stop_time = start_time + duration;
+
+  if (current_time > start_time  &&   current_time < stop_time)
+
+  switch (automode) {
+  case AUTO_MODE_STOP:
+    motorRun(0, 0);
+    servo1.write(90);
+      break;
+  case AUTO_MODE_FORWARD:
+    motorRun(150, 150);
+      break;
+  case AUTO_MODE_BACKWARD:
+    motorRun(-150, -150);
+      break;
+  case AUTO_MODE_RIGHTTURN:
+      motorRun(200, -200);
+      break;
+  case AUTO_MODE_LEFTTURN:
+      motorRun(-185, 185);
+      break;
+  case AUTO_MODE_SERVO_POS:
+      motorRun(0, 0);
+      servo1.write(180);
+      break;
+  case AUTO_MODE_SERVO_NEG:
+      motorRun(0, 0);
+      servo1.write(0);
+      break;
+  }  
+
+  return stop_time;
+}
+
+void autonomous(int time_now) {
+  int start_next;
+  //                            mode     current_time  start_time  duration
+  start_next = do_auto(AUTO_MODE_FORWARD,   time_now,        0,    1500); // 1500
+  start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 1000); // 2500
+  start_next = do_auto(AUTO_MODE_BACKWARD,  time_now,  start_next, 1500); // 4000
+  start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 1000); // 5000
+  start_next = do_auto(AUTO_MODE_RIGHTTURN, time_now,  start_next, 1500); // 6500
+  start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 1000); // 7500
+  start_next = do_auto(AUTO_MODE_LEFTTURN,  time_now,  start_next, 1500); // 9000
+  start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 1000); // 10000
+  start_next = do_auto(AUTO_MODE_SERVO_POS, time_now,  start_next, 1500); // 11500
+  start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 1000); // 12500
+  start_next = do_auto(AUTO_MODE_SERVO_NEG, time_now,  start_next, 1500); // 14000
+  start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 500);  // 14500
 }
 
 void setupScreen() {
