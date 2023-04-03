@@ -51,6 +51,7 @@ void setup() {
   }
 
   mode = MODE_STOP;
+  screenPrint(3,6,"STOP");
 }
 
 void loop() {
@@ -64,6 +65,7 @@ void loop() {
       {
         mode = MODE_AUTO;
         automode = AUTO_MODE_STOP;
+        screenPrint(3,6,"AUTO");
         start_time = millis();
         //Serial.println(start_time);
       }  
@@ -77,6 +79,7 @@ void loop() {
         if (delta_time > 15000)
         {
           mode = MODE_TELEOP;  
+          screenPrint(3,6,"TELEOP");
         } 
         else 
         {
@@ -104,23 +107,6 @@ void loop() {
       }
     }
       lastNrfUpdateTime = millis();
-  }
-
-  //Slow Update
-  if((millis() % 1000) == 0)
-  {
-    if(mode == MODE_STOP)
-    {
-      screenPrint(3,7,"STOP");
-    }
-    else if (mode == MODE_AUTO)
-    {
-      screenPrint(3,7,"AUTO");
-    }
-    else 
-    {
-      screenPrint(3,7,"TELEOP");
-    }
   }
   
   if (millis() - lastNrfUpdateTime > NRF_UPDATE_TIMEOUT) {
