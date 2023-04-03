@@ -51,7 +51,7 @@ void setup() {
   }
 
   mode = MODE_STOP;
-  screenPrint(3,6,"STOP");
+  screenPrint(3,6,"STOP"); //Initilize so that the car is on stop mode once a signal is read
 }
 
 void loop() {
@@ -61,7 +61,7 @@ void loop() {
 
     if (mode == MODE_STOP) 
     {
-      if ( nrfDataRead[5] == 0 )
+      if ( nrfDataRead[5] == 0 ) //Once buttons is pressed down switch from stop to auto mode
       {
         mode = MODE_AUTO;
         automode = AUTO_MODE_STOP;
@@ -74,7 +74,7 @@ void loop() {
     if (mode == MODE_AUTO)
     {
         current_time = millis();
-        delta_time = current_time - start_time;
+        delta_time = current_time - start_time; //Time since mode started, used as a check to change to manual mode after 15 seconds
 
         if (delta_time > 15000)
         {
@@ -87,7 +87,7 @@ void loop() {
         }
     }
 
-    if (mode == MODE_TELEOP )
+    if (mode == MODE_TELEOP ) //Manual mode
     {
       updateCarActionByNrfRemote();
       
@@ -122,7 +122,7 @@ int do_auto(int automode, int current_time,  int start_time, int duration) {
 
   if (current_time > start_time  &&   current_time < stop_time)
 
-  switch (automode) {
+  switch (automode) {       //Definitions for automode; names are self defining, forward = moves forward etc
   case AUTO_MODE_STOP:
     motorRun(0, 0);
     servo1.write(90);
@@ -152,7 +152,7 @@ int do_auto(int automode, int current_time,  int start_time, int duration) {
   return stop_time;
 }
 
-void autonomous(int time_now) {
+void autonomous(int time_now) { //Action for autonomous mode
   int start_next;
   //                            mode     current_time  start_time  duration
   start_next = do_auto(AUTO_MODE_FORWARD,   time_now,        0,    1500); // 1500
@@ -169,7 +169,7 @@ void autonomous(int time_now) {
   start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 500);  // 14500
 }
 
-void setupScreen() {
+void setupScreen() { //screen initialize
   Wire.begin();
   Wire.setClock(400000L);
   oled.begin(&Adafruit128x64, I2C_ADDRESS);
