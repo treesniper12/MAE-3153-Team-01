@@ -62,7 +62,7 @@ void loop()
 
     if (mode == MODE_STOP) 
     {
-      if ( nrfDataRead[5] == 0 ) //Once buttons is pressed down switch from stop to auto mode
+      if ( nrfDataRead[5] == 0 ) //Once buttons is pressed down switch from stop to auto mode; pressed down = 0
       {
         mode = MODE_AUTO;
         automode = AUTO_MODE_STOP;
@@ -89,7 +89,7 @@ void loop()
         } 
         else 
         {
-          autonomous(delta_time);
+          autonomous(delta_time); //Run autonomous mode and send Delta_time as data for the function
         }
     }
 
