@@ -15,7 +15,7 @@
 #define NRF_UPDATE_TIMEOUT    1000
 
 #define MODE_STOP 0
-#define MODE_MANUAL 1
+#define MODE_TELEOP 1
 #define MODE_AUTO 2
 
 #define AUTO_MODE_STOP 0
@@ -76,7 +76,7 @@ void loop() {
 
         if (delta_time > 15000)
         {
-          mode = MODE_MANUAL;  
+          mode = MODE_TELEOP;  
         } 
         else 
         {
@@ -84,7 +84,7 @@ void loop() {
         }
     }
 
-    if (mode == MODE_MANUAL  )
+    if (mode == MODE_TELEOP )
     {
       updateCarActionByNrfRemote();
       
@@ -104,6 +104,23 @@ void loop() {
       }
     }
       lastNrfUpdateTime = millis();
+  }
+
+  //Slow Update
+  if((millis() % 1000) == 0)
+  {
+    if(mode == MODE_STOP)
+    {
+      screenPrint(3,7,"STOP");
+    }
+    else if (mode == MODE_AUTO)
+    {
+      screenPrint(3,7,"AUTO");
+    }
+    else 
+    {
+      screenPrint(3,7,"TELEOP");
+    }
   }
   
   if (millis() - lastNrfUpdateTime > NRF_UPDATE_TIMEOUT) {
