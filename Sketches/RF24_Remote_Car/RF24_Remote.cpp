@@ -55,8 +55,8 @@ if ( nrfDataRead[7] == 0)
 }
 rightturn=rightturn * speed;
 //forward = forward * speed;
-leftmotor = (forward + rightturn) / 2;
-rightmotor = (forward - rightturn) / 2;
+leftmotor = -(forward + rightturn) / 2;
+rightmotor = -(forward - rightturn) / 2;
 motorRun(leftmotor, rightmotor);
 if (nrfDataRead[4] == 0) 
 {
