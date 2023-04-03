@@ -54,7 +54,8 @@ void setup() {
   screenPrint(3,6,"STOP"); //Initilize so that the car is on stop mode once a signal is read
 }
 
-void loop() {
+void loop() 
+{
   if (getNrf24L01Data()) 
   {
     clearNrfFlag();
@@ -69,6 +70,11 @@ void loop() {
         start_time = millis();
         //Serial.println(start_time);
       }  
+      else if ( nrfDataRead[7] == 0)
+      {
+        mode = MODE_TELEOP;
+        screenPrint(3, 6, "TELEOP");
+      }
     }
 
     if (mode == MODE_AUTO)
