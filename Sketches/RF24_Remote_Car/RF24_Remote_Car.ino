@@ -103,9 +103,14 @@ void loop()
       {
         servo1.write(int(91+(servoSpeed*36)));
       } 
-      else if (nrfDataRead[6] == 0)
+      else if (nrfDataRead[7] == 0)
       {
         servo1.write(int(91-(servoSpeed*32)));
+      }
+      else if (nrfDataRead[6] == 0)
+      {
+        mode = MODE_STOP;
+        screenPrint(3,6,"STOP");
       }
       else
       {
