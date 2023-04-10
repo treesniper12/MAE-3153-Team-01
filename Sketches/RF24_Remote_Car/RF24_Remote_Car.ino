@@ -56,6 +56,7 @@ void setup() {
 
 void loop() 
 {
+
   if (getNrf24L01Data()) 
   {
     clearNrfFlag();
@@ -89,7 +90,7 @@ void loop()
         } 
         else 
         {
-          autoBlockerLeftHold(delta_time);
+          autoBlockerMidHold(delta_time);
         }
     }
 
@@ -239,6 +240,13 @@ void autoBlockerRightGo(int time_now) { //Action for autonomous mode
   start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 1000); // 4830
   start_next = do_auto(AUTO_MODE_BACKWARD,  time_now,    start_next, 650); // 5430
   start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 1000); // 10000
+}
+
+void autoBlockerMidHold(int time_now) { //Action for autonomous mode
+  int start_next;
+  //                            mode     current_time  start_time  duration
+  start_next = do_auto(AUTO_MODE_BACKWARD,   time_now,        0,    1050); // 250
+  start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 1000); // 1250
 }
 
 void autoBlockerMidRush(int time_now) { //Action for autonomous mode
