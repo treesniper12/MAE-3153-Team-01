@@ -21,9 +21,9 @@ enum RemoteData
 	JOYSTICK_X = 2,
 	JOYSTICK_Y = 3,
 	JOYSTICK_Z = 4,
-	S1 = 5,
-	S2 = 6,
-	S3 = 7
+	S1 = 5, // Button 1
+	S2 = 6, // Button 2
+	S3 = 7  // Button 3
 };
 enum RemoteMode {
 	ON_ON_ON = 0,
@@ -31,9 +31,9 @@ enum RemoteMode {
 	ON_OFF_ON = 2,
 	ON_OFF_OFF = 3,		//Ultrasonic obstacle avoidance mode.
 	OFF_ON_ON = 4,
-	OFF_ON_OFF = 5,		//Line tracking mode.
+	OFF_ON_OFF = 5,		//Line tracking mode. (STOP) tell the car to go into auto mode. (TELEOP) On teleop controls four bar
 	OFF_OFF_ON = 6,		//
-	OFF_OFF_OFF = 7			//Remote control mode.
+	OFF_OFF_OFF = 7			//Remote control mode. (Stop) tell car to go into teleop mode. (TELEOP) on teleop controls four bar
 };
 enum RemoteModeSwitchState {
 	MODE_SWITCHING_IS_INITIALIZING = 0,

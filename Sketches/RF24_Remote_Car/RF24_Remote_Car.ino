@@ -5,6 +5,10 @@
   Auther      : www.freenove.com
   Modification: 2020/11/27
 **********************************************************************/
+// For controls and bindings see RF24_Remote.h
+
+
+
 #include "Freenove_4WD_Car_for_Arduino.h"
 #include "RF24_Remote.h"
 #include <Wire.h>
