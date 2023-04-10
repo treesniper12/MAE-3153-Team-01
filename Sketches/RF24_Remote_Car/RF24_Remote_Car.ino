@@ -5,6 +5,10 @@
   Auther      : www.freenove.com
   Modification: 2020/11/27
 **********************************************************************/
+// For controls and bindings see RF24_Remote.h
+
+
+
 #include "Freenove_4WD_Car_for_Arduino.h"
 #include "RF24_Remote.h"
 #include <Wire.h>
@@ -62,7 +66,7 @@ void loop()
 
     if (mode == MODE_STOP) 
     {
-      if ( nrfDataRead[5] == 0 ) //Once buttons is pressed down switch from stop to auto mode
+      if ( nrfDataRead[5] == 0 ) //Once buttons is pressed down switch from stop to auto mode; pressed down = 0
       {
         mode = MODE_AUTO;
         automode = AUTO_MODE_STOP;
@@ -89,7 +93,7 @@ void loop()
         } 
         else 
         {
-          autoBlockerLeftHold(delta_time);
+          autonomous(delta_time); //Run autonomous mode and send Delta_time as data for the function
         }
     }
 
@@ -163,7 +167,6 @@ int do_auto(int automode, int current_time,  int start_time, int duration) {
   return stop_time;
 }
 
-/* example auto
 void autonomous(int time_now) { //Action for autonomous mode
   int start_next;
   //                            mode     current_time  start_time  duration
@@ -179,106 +182,7 @@ void autonomous(int time_now) { //Action for autonomous mode
   start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 1000); // 12500
   start_next = do_auto(AUTO_MODE_SERVO_NEG, time_now,  start_next, 1500); // 14000
   start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 500);  // 14500
-} */
-
-void autoBlockerLeftHold(int time_now) { //Action for autonomous mode
-  int start_next;
-  //                            mode     current_time  start_time  duration
-  start_next = do_auto(AUTO_MODE_BACKWARD,   time_now,        0,    250); // 250
-  start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 1000); // 1250
-  start_next = do_auto(AUTO_MODE_LEFTTURN,   time_now,  start_next, 250); // 1500
-  start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 1000); // 2500
-  start_next = do_auto(AUTO_MODE_BACKWARD,  time_now, start_next, 315); // 2615
-  start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 1000); // 3615
-  start_next = do_auto(AUTO_MODE_RIGHTTURN, time_now,   start_next, 215); // 3830
-  start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 1000); // 4830
-  start_next = do_auto(AUTO_MODE_BACKWARD,  time_now,    start_next, 600); // 5430
-  start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 1000); // 10000
 }
-
-void autoBlockerLeftGo(int time_now) { //Action for autonomous mode
-  int start_next;
-  //                            mode     current_time  start_time  duration
-  start_next = do_auto(AUTO_MODE_BACKWARD,   time_now,        0,    250); // 250
-  start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 1000); // 1250
-  start_next = do_auto(AUTO_MODE_LEFTTURN,   time_now,  start_next, 250); // 1500
-  start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 1000); // 2500
-  start_next = do_auto(AUTO_MODE_BACKWARD,  time_now, start_next, 315); // 2615
-  start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 1000); // 3615
-  start_next = do_auto(AUTO_MODE_RIGHTTURN, time_now,   start_next, 215); // 3830
-  start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 1000); // 4830
-  start_next = do_auto(AUTO_MODE_BACKWARD,  time_now,    start_next, 750); // 5430
-  start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 1000); // 10000
-}
-
-void autoBlockerRightHold(int time_now) { //Action for autonomous mode
-  int start_next;
-  //                            mode     current_time  start_time  duration
-  start_next = do_auto(AUTO_MODE_BACKWARD,   time_now,        0,    250); // 250
-  start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 1000); // 1250
-  start_next = do_auto(AUTO_MODE_RIGHTTURN,   time_now,  start_next, 215); // 1500
-  start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 1000); // 2500
-  start_next = do_auto(AUTO_MODE_BACKWARD,  time_now, start_next, 315); // 2615
-  start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 1000); // 3615
-  start_next = do_auto(AUTO_MODE_LEFTTURN, time_now,   start_next, 215); // 3830
-  start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 1000); // 4830
-  start_next = do_auto(AUTO_MODE_BACKWARD,  time_now,    start_next, 550); // 5430
-  start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 1000); // 10000
-}
-
-void autoBlockerRightGo(int time_now) { //Action for autonomous mode
-  int start_next;
-  //                            mode     current_time  start_time  duration
-  start_next = do_auto(AUTO_MODE_BACKWARD,   time_now,        0,    250); // 250
-  start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 1000); // 1250
-  start_next = do_auto(AUTO_MODE_RIGHTTURN,   time_now,  start_next, 215); // 1500
-  start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 1000); // 2500
-  start_next = do_auto(AUTO_MODE_BACKWARD,  time_now, start_next, 315); // 2615
-  start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 1000); // 3615
-  start_next = do_auto(AUTO_MODE_LEFTTURN, time_now,   start_next, 215); // 3830
-  start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 1000); // 4830
-  start_next = do_auto(AUTO_MODE_BACKWARD,  time_now,    start_next, 650); // 5430
-  start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 1000); // 10000
-}
-
-void autoBlockerMidRush(int time_now) { //Action for autonomous mode
-  int start_next;
-  //                            mode     current_time  start_time  duration
-  start_next = do_auto(AUTO_MODE_BACKWARD,   time_now,        0,    1250); // 250
-  start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 100); // 1250
-  start_next = do_auto(AUTO_MODE_FORWARD,   time_now,  start_next, 500); // 1500
-  start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 500); // 2500
-  start_next = do_auto(AUTO_MODE_RIGHTTURN,  time_now, start_next, 650); // 2615
-  start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 1000); // 3615
-}
-
-void autoBlockerAllRush(int time_now) { //Action for autonomous mode
-  int start_next;
-  //                            mode     current_time  start_time  duration
-  start_next = do_auto(AUTO_MODE_BACKWARD,   time_now,        0,    1250); // 250
-  start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 100); // 1250
-  start_next = do_auto(AUTO_MODE_FORWARD,   time_now,  start_next, 500); // 1500
-  start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 500); // 2500
-  start_next = do_auto(AUTO_MODE_RIGHTTURN,  time_now, start_next, 190); // 2615
-  start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 500); // 3615
-  start_next = do_auto(AUTO_MODE_BACKWARD,   time_now, start_next, 650); // 250
-  start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 100); // 1250
-  start_next = do_auto(AUTO_MODE_FORWARD,   time_now,  start_next, 650); // 1500
-  start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 500); // 2500
-  start_next = do_auto(AUTO_MODE_LEFTTURN,  time_now, start_next, 180); // 2615
-  start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 500); // 3615
-  start_next = do_auto(AUTO_MODE_LEFTTURN,  time_now, start_next, 180); // 2615
-  start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 500); // 3615
-  start_next = do_auto(AUTO_MODE_BACKWARD,   time_now, start_next, 725); // 250
-  start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 100); // 1250
-  start_next = do_auto(AUTO_MODE_FORWARD,   time_now,  start_next, 725); // 1500
-  start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 500); // 2500
-  start_next = do_auto(AUTO_MODE_RIGHTTURN,  time_now, start_next, 190); // 2615
-  start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 500); // 2500
-  start_next = do_auto(AUTO_MODE_RIGHTTURN,  time_now, start_next, 650); // 2615
-  start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 1000); // 3615
-}
-
 
 void setupScreen() { //screen initialize
   Wire.begin();
