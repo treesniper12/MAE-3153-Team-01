@@ -90,7 +90,7 @@ void loop()
         } 
         else 
         {
-          autoBlockerMidHold(delta_time);
+          autoLiftStyleOnEm(delta_time);
         }
     }
 
@@ -285,6 +285,14 @@ void autoBlockerAllRush(int time_now) { //Action for autonomous mode
   start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 500); // 2500
   start_next = do_auto(AUTO_MODE_RIGHTTURN,  time_now, start_next, 650); // 2615
   start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 1000); // 3615
+}
+
+void autoLiftStyleOnEm(int time_now) { //Action for autonomous mode
+  int start_next;
+  //                            mode     current_time  start_time  duration
+  start_next = do_auto(AUTO_MODE_FORWARD,   time_now,        0,    500); // 
+  start_next = do_auto(AUTO_MODE_RIGHTTURN, time_now, start_next, 14000); // 2615
+  start_next = do_auto(AUTO_MODE_STOP,      time_now,  start_next, 500); // 1250
 }
 
 
